@@ -26,13 +26,13 @@ class BaseElementExtension extends DataExtension
      *
      * @var boolean
      */
-    private static $default_global_elements = true;
+    private static $default_global_elements = false;
 
     /**
      * @var array
      */
     private static $db = [
-        'AvailableGlobally' => 'Boolean(1)'
+        'AvailableGlobally' => 'Boolean'
     ];
 
     /**
@@ -42,10 +42,11 @@ class BaseElementExtension extends DataExtension
         'VirtualClones' => ElementVirtual::class
     ];
 
+    // private static $controller_template = 'ElementVirtualHolder';
+
     public function populateDefaults()
     {
         $default = $this->owner->config()->get('default_global_elements');
-
         $this->AvailableGlobally = $default;
     }
 
@@ -236,7 +237,7 @@ class BaseElementExtension extends DataExtension
     {
         $usage = new ArrayList();
 
-        if ($page = $this->getPage()) {
+        if ($page = $this->owner->getPage()) {
             $usage->push($page);
             if ($this->virtualOwner) {
                 $page->setField('ElementType', 'Linked');
@@ -245,7 +246,7 @@ class BaseElementExtension extends DataExtension
             }
         }
 
-        $linkedElements = ElementVirtual::get()->filter('LinkedElementID', $this->ID);
+        $linkedElements = ElementVirtual::get()->filter('LinkedElementID', $this->owner->ID);
 
         foreach ($linkedElements as $element) {
             $area = $element->Parent();

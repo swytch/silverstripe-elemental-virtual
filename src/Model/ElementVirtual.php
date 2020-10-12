@@ -7,6 +7,7 @@ use SilverStripe\ElementalVirtual\Forms\ElementalGridFieldAddExistingAutocomplet
 use DNADesign\Elemental\Models\BaseElement;
 use SilverStripe\Forms\FieldList;
 use SilverStripe\Forms\LiteralField;
+use SilverStripe\Forms\DropdownField;
 use SilverStripe\Forms\Tab;
 use SilverStripe\Forms\TabSet;
 use SilverStripe\ORM\FieldType\DBField;
@@ -22,7 +23,7 @@ use SilverStripe\ORM\FieldType\DBHTMLText;
  */
 class ElementVirtual extends BaseElement
 {
-    private static $icon = 'element-icon-virtual';
+    private static $icon = 'material-icons font-icon-block-virtual';
 
     private static $has_one = [
         'LinkedElement' => BaseElement::class
@@ -71,20 +72,17 @@ class ElementVirtual extends BaseElement
                 $fields->addFieldToTab('Root.Main', LiteralField::create('WarningHeader', '<p class="message error">' . $warning . '</p>'));
             }
 
-            $autocomplete = AutoCompleteField::create(
-                'LinkedElementID',
+            $selector = DropdownField::create('LinkedElementID',
                 _t(__CLASS__ . '.LinkedElement', 'Linked Element'),
-                '',
-                BaseElement::class,
-                'Title'
-            );
-
-            $autocomplete->setLabelField('VirtualLinkedSummary');
-            $autocomplete->setDisplayField('VirtualLinkedSummary');
+                BaseElement::get()
+                    ->filter('AvailableGlobally', true)
+                    ->exclude('ClassName', self::class)
+                    ->map('ID', 'Title')
+                )->setEmptyString('(Select one)');
 
             $fields->replaceField(
                 'LinkedElementID',
-                $autocomplete
+                $selector
             );
             $fields->addFieldToTab('Root.Main', LiteralField::create('Existing', $message));
         });
@@ -169,7 +167,7 @@ class ElementVirtual extends BaseElement
      */
     public function inlineEditable()
     {
-        return false;
+        return true;
     }
 
     protected function provideBlockSchema()
