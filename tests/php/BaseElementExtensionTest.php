@@ -19,17 +19,17 @@ class BaseElementExtensionTest extends SapphireTest
         TestPage::class
     ];
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Config::modify()->set('Page', 'can_be_root', true);
-        
+
         $this->page = $this->objFromFixture(TestPage::class, 'page1');
         $this->page->publishRecursive();
     }
 
-    public function testVirtualElementAnchor()
+    public function testVirtualElementAnchor(): void
     {
         Config::modify()->set(BaseElement::class, 'disable_pretty_anchor_name', true);
 
@@ -39,13 +39,13 @@ class BaseElementExtensionTest extends SapphireTest
         $this->assertEquals('e'. $linked->ID, $element->getAnchor());
     }
 
-    public function testUpdateCmsFields()
+    public function testUpdateCmsFields(): void
     {
         $linked = $this->objFromFixture(TestElement::class, 'element1');
 
         // should show that this element has virtual clones
         $list = $linked->getCMSFields()->dataFieldByName('VirtualClones')->getList();
-        
+
         $this->assertEquals(1, $list->count());
     }
 }
