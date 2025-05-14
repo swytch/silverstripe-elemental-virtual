@@ -14,7 +14,7 @@
     "require": {
         "php": "^8.1",
         "dnadesign/silverstripe-elemental": "^5",
-        "tractorcow/silverstripe-autocomplete": "5.x-dev",
+        "tractorcow/silverstripe-autocomplete": "5.0.x-dev",
         "silverstripe/admin": "^2"
     },
     "require-dev": {
