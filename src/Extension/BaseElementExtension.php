@@ -16,6 +16,7 @@ use SilverStripe\Forms\GridField\GridFieldDetailForm;
 
 class BaseElementExtension extends DataExtension
 {
+    public $AvailableGlobally;
     /**
      * @var mixed
      */
